@@ -1,4 +1,5 @@
 ﻿using Dekoto.Actors;
+using Dekoto.Actors.Messages;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,9 +20,18 @@ public class Writer
 	private int FromSecondsToMiliseconds(float seconds)
 		=> (int)(seconds * MilisecondInOneSecond);
 
-	private Message? lastMessage;
+	private ITalking lastGuy;
+	private int lastGuyOffset;
 	public void Write(ITalking sender, Message msg)
 	{
+		if (sender.Equals(lastGuy))
+		{
+			CC.Write(String.Concat(Enumerable.Repeat(" ", lastGuyOffset)));
+			CC.Write("| ");
+
+			goto SKIP_USER;
+		}
+
 		if (sender.ShowMyName)
 		{
 			CC.Write("[");
@@ -34,9 +44,18 @@ public class Writer
 			CC.Write(sender.Name);
 
 			CC.ResetColor();
-			CC.Write("]");
-		}
+			CC.Write("] ");
 
+			lastGuy = sender;
+			lastGuyOffset
+				=
+				#if DEBUG
+				sender.ID.Length + 1 + 
+#endif
+				sender.Name.Length + 1
+				;
+		}
+		SKIP_USER:
 		//Color? lastColor = null;
 		foreach (MessagePart part in msg.GetAllText())
 		{
@@ -48,10 +67,13 @@ public class Writer
 			{
 				if (showTime != 0)
 					Task.Delay(FromSecondsToMiliseconds(showTime * Options.TextSpeedMultiplier)).Wait();
-				CC.Write(c);
+
+				if (textColor.HasValue)
+					CC.Write(c, textColor.Value);
+				else
+					CC.Write(c);
 			}
 		}
-
-		lastMessage = msg;
+		CC.WriteLine();
 	}
 }

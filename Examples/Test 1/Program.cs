@@ -1,4 +1,5 @@
 ﻿using Dekoto.Actors;
+using Dekoto.Actors.Messages;
 using Dekoto.Engine;
 using System.Drawing;
 
@@ -23,6 +24,22 @@ internal class Program
 		Scenario scenario = new();
 
 		writer.Write(user, new SimpleMessage("Hello world", 20f));
+		writer.Write(user, new SimpleMessage("How about minecraft?", 17f));
 		writer.Write(glossy, new SimpleMessage("How about sex?", 20f));
+		writer.Write(glossy, new MulticoloredMessage(20f,
+			new Color?[]
+			{
+				null,
+				null,
+				Color.BlueViolet,
+				null,
+			},
+			new string[]
+			{
+				"Are ",
+				"you ",
+				"gay",
+				"?"
+			}));
 	}
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dekoto.Actors;
+namespace Dekoto.Resources;
 
-public abstract class Message
+public class Sound : IResource
 {
-	public abstract IEnumerable<MessagePart> GetAllText();
 }
