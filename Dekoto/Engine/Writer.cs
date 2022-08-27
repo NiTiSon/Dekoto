@@ -72,6 +72,7 @@ public class Writer
 					CC.Write(c, textColor.Value);
 				else
 					CC.Write(c);
+
 			}
 		}
 		CC.WriteLine();
